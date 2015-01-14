@@ -1,0 +1,330 @@
+\documentclass[10pt,landscape,a4paper]{article}
+\usepackage{multicol}
+\usepackage{calc}
+\usepackage{ifthen}
+\usepackage[landscape]{geometry}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{xfrac}
+\usepackage{galois}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{matrix}
+
+\usepackage{alltt}
+\usepackage{stmaryrd}
+
+\renewcommand*{\familydefault}{\sfdefault}
+
+
+% To make this come out properly in landscape mode, do one of the following
+% 1.
+%  pdflatex latexsheet.tex
+%
+% 2.
+%  latex latexsheet.tex
+%  dvips -P pdf  -t landscape latexsheet.dvi
+%  ps2pdf latexsheet.ps
+
+
+% If you're reading this, be prepared for confusion.  Making this was
+% a learning experience for me, and it shows.  Much of the placement
+% was hacked in; if you make it better, let me know...
+
+
+% 2008-04
+% Changed page margin code to use the geometry package. Also added code for
+% conditional page margins, depending on paper size. Thanks to Uwe Ziegenhagen
+% for the suggestions.
+
+% 2006-08
+% Made changes based on suggestions from Gene Cooperman. <gene at ccs.neu.edu>
+
+
+% To Do:
+% \listoffigures \listoftables
+% \setcounter{secnumdepth}{0}
+
+
+% This sets page margins to .5 inch if using letter paper, and to 1cm
+% if using A4 paper. (This probably isn't strictly necessary.)
+% If using another size paper, use default 1cm margins.
+\ifthenelse{\lengthtest { \paperwidth = 11in}}
+	{ \geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+	{\ifthenelse{ \lengthtest{ \paperwidth = 297mm}}
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+	}
+
+% Turn off header and footer
+\pagestyle{empty}
+ 
+
+% Redefine section commands to use less space
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%x
+                                {\normalfont\large\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+                                {-1explus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%
+                                {\normalfont\normalsize\bfseries}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {1ex plus .2ex}%
+                                {\normalfont\small\bfseries}}
+\makeatother
+
+% Define BibTeX command
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+% Don't print section numbers
+\setcounter{secnumdepth}{0}
+
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0.5ex}
+
+
+% -----------------------------------------------------------------------
+
+\begin{document}
+
+\raggedright
+\footnotesize
+\begin{multicols}{3}
+
+
+% multicol parameters
+% These lengths are set only within the two main columns
+%\setlength{\columnseprule}{0.25pt}
+\setlength{\premulticols}{1pt}
+\setlength{\postmulticols}{1pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{2pt}
+
+\begin{center}
+  \Large{Isabelle/HOL Proof Assistant} %\\
+  % \normalsize{Basic Category Theory for Computer Scientists}\\
+  \vspace{0.3cm}
+  %  \tiny {Inspir\'{e} des notes de cours du MPRI de Paul-Andr\'{e} Melli\`{e}s, CNRS/ENS Ulm}\\
+\end{center}
+
+\section{Isar engine}
+Use of Natural Deduction (ND) instead of Gentzen sequent calculus (LJ/LK). Thus, $\Gamma$ is a \textbf{metacontext} and its objects can be used with following commands : \verb!assume A!, \verb!show B!\dots
+
+\section{Syntax of Isabelle commands}
+
+\subsubsection{Inspection Commands}
+\begin{itemize}
+\item type-checking terms : \verb!term "!$\langle\textsf{hol-term}\rangle$\verb!"! 
+\item evaluating terms : \verb!value "!$\langle\textsf{hol-term}\rangle$\verb!"! 
+\item explore libraries : \verb!find_theorems <theorem content>* [name: <theorem name>]*! 
+\end{itemize}
+
+\subsubsection{Specification Commands}
+\begin{itemize}
+\item non-recursive definitions : \verb!definition f :: "!$\langle\tau\rangle$\verb!"!
+  \verb!where !\textsf{name}\verb! : "f x1 ... xn = !$\langle\tau\rangle$\verb!"!
+\item type definitions : \verb!typedef ('a1, ..., 'an) !$\kappa$\verb! = "!$\langle\textsf{set-expr}\rangle$\verb!" !$\langle\textsf{proof}\rangle$
+
+  \textbf{Example.} \verb!typedef even  = "{ x :: int. x mod 2 = 0 }"!
+\end{itemize}
+
+\subsubsection{Specification Mechanism Commands}
+\begin{itemize}
+\item datatype definitions:
+\begin{eqnarray*}
+  \verb!datatype ('a1, ..., 'an) = ! \langle c \rangle\verb! :: "! \langle \tau \rangle \verb!"! | \dots | \langle c \rangle\verb! :: "! \langle \tau \rangle \verb!"! 
+\end{eqnarray*}
+
+\item recursive function definitions : \verb!typedef ('a1, ..., 'an) !$\kappa$\verb! = "!$\langle\textsf{set-expr}\rangle$\verb!" !$\langle\textsf{proof}\rangle$
+
+  \textbf{Example.} \verb!typedef even  = "{ x :: int. x mod 2 = 0 }"!
+
+\item inductively defined sets:
+\begin{alltt}
+inductive <c> [ for <v> :: "<\(\tau\)>" ]
+  where <thmname> : "<\(\varphi\)>"
+      | ...
+      | <thmname> = "<\(\varphi\)>"
+\end{alltt}
+
+\textbf{Example.}
+\begin{alltt}
+inductive path for rel :: "'a \(\Rightarrow\) 'a \(\Rightarrow\) bool" 
+where base : "path rel x x"
+    | step : "rel x y \(\Rightarrow\) path rel y z \(\Rightarrow\) path rel x z"
+\end{alltt}
+
+\item extended notation for cartesian products (records):
+\begin{alltt}
+record <c> = [<record> +]
+  tag\(\sb{1}\) :: "<\(\tau\sb{1}\)>"
+  ...
+  tag\(\sb{n}\) :: "<\(\tau\sb{n}\)>"
+\end{alltt}
+
+\end{itemize}
+
+\section{Apply rules and theorems}
+
+\begin{itemize}
+\item $\verb!apply assumption!$ proves $\llbracket B_1, \dots, B_m \rrbracket \Rightarrow C$ by unifying $C$ with one of the $B_i$
+
+\item $\verb!apply (rule !\langle\textsf{intro-rule}\rangle\verb!)!$ :
+  \begin{enumerate}
+  \item decompose formulae to the right of $\Rightarrow$
+  \item applying $\llbracket A_1, \dots, A_n \rrbracket \Rightarrow A$ to subgoal $C$,
+    \begin{enumerate}
+    \item unify $A$ and $C$
+    \item replace $C$ with $n$ new subgoals $A_1$, \dots, $A_n$
+    \end{enumerate}
+  \end{enumerate}
+
+\item $\verb!apply (erule !\langle\textsf{elim-rule}\rangle\verb!)!$ :
+  \begin{enumerate}
+  \item decompose formulae to the left of $\Rightarrow$
+  \item applying $\llbracket A_1, \dots, A_n \rrbracket \Rightarrow A$ to subgoal $C$, like \textsf{rule} but also
+    \begin{enumerate}
+    \item unifies first premise of rule with an assumption
+    \item eliminates that assumption
+    \end{enumerate}
+  \end{enumerate}
+
+\item $\verb!apply (case_tac !\langle\textsf{term}\rangle\verb!)!$ : case distinctions on arbitrary terms (e.g. \verb!excluded_middle! on type \textsf{bool})
+
+\item $\verb!apply (rule_tac x = "! \langle \mathsf{term} \rangle \verb!" in ! \langle \mathsf{rule} \rangle \verb!)!$
+  \begin{enumerate}
+  \item like \textsf{rule} but $? x$ in $\langle \mathsf{rule} \rangle$ is instanciated by $\langle \mathsf{term} \rangle$ before application
+  \item applying $\llbracket A_1, \dots, A_n \rrbracket \Rightarrow A$ to subgoal $C$,
+    \begin{enumerate}
+    \item $x$ is in $\langle \mathsf{rule} \rangle$, not in goal
+    \item $\langle \mathsf{term} \rangle$ may contain parameters from the goal and those introduced in Isar texts
+    \end{enumerate}
+  \end{enumerate}
+
+  \item $\verb!apply (erule_tac x = "! \langle \mathsf{term} \rangle \verb!" in ! \langle \mathsf{rule} \rangle \verb!)!$ : similar
+
+  \item $\verb!apply (rename_tac !x_1 \dots x_n \verb!)!$ renames the rightmost (inner) $n$ parameters to $x_1$, \dots, $x_n$
+
+  \item $\verb!apply (frule !\langle\textsf{rule}\rangle\verb!)!$ : ?
+  \item $\verb!apply clarify!$ : applies all safe rules that do not split the goal
+  \item $\verb!apply safe!$ : applies all safe rules
+  \item $\verb!apply fast!$ : sequent based automatic
+  \item $\verb!apply best!$ : search tactics
+  \item $\verb!apply blast!$ : automatic tableaux prover (works well on predicate logic)
+  \item $\verb!apply metis!$ : resolution prover for FO with equality
+  \item $\verb!insert!$ ?
+\end{itemize}
+
+\section{Logical rules}
+
+\subsubsection{Rules Safety}
+\textbf{Definition.} \textbf{Safe rules} preserve provability.
+\begin{itemize}
+\item safe: \verb!conjI!, \verb!impI!, \verb!notI!, \verb!iffI!, \verb!refl!, \verb!ccontr!, \verb!classical!, \verb!conjE!, \verb!disjE!, \verb!allI!, \verb!exE!
+\item unsafe: \verb!disjl1!, \verb!disjl2!, \verb!impE!, \verb!iffD1!, \verb!iffD2!, \verb!notE!, \verb!allE!, \verb!exI!
+\end{itemize}
+\begin{enumerate}
+\item Apply safe rules before unsafe ones
+\item Create parameters first, unknowns later
+\end{enumerate}
+
+\subsubsection{Description operator}
+\begin{enumerate}
+\item $\varepsilon$-operator : $\varepsilon x ~ P(x)$ is a value that satisfies $P$ (if exists) ; written in Isabelle as $\verb!SOME! ~ x. P x$ s.t.
+  \begin{eqnarray*}
+    \frac{P (? x)}{P (\texttt{SOME} ~ x. P(x))} ~ \texttt{someI}
+  \end{eqnarray*}
+\item $\iota$-operator : $\varepsilon$ implies Axiom of Choice\footnote{Axiom of Choice : $\forall x ~ \exists y ~ P x y \Rightarrow \exists f ~ \forall x ~ P ~ x ~ (f x)$} :
+  
+\end{enumerate}
+
+\subsubsection{Intuitionistic logic (LJ)}
+\begin{tabular}{c|c|c}
+  \textbf{Name}              & \textbf{Rule in Gentzen style} & \textbf{Desc.} \\ \hline \hline
+  $\verb!TrueI!$             & $\displaystyle\frac{}{\Gamma \vdash \top}$ &  \\ [2ex]
+  $\verb!FalseE!$             & $\displaystyle\frac{\Gamma \vdash \bot}{\Gamma \vdash P}$ &  \\ [2ex]
+  $\verb!notI!$              & $\displaystyle\frac{\Gamma, A \vdash \bot}{\Gamma \vdash \neg A}$ &  \\ [2ex]
+  $\verb!notE!$              & $\displaystyle\frac{\Gamma \vdash A \quad \Gamma \vdash \neg A}{\Gamma \vdash P}$ &  \\ [2ex]
+  $\verb!conjI!$             & $\displaystyle\frac{\Gamma \vdash A \quad \Gamma \vdash B}{\Gamma \vdash A \wedge B}$ &  \\ [2ex]
+  $\verb!conjE!$             & $\displaystyle\frac{\Gamma \vdash A \wedge B \quad \Gamma, A, B \vdash C}{\Gamma \vdash C}$ &  \\ [2ex]
+  $\verb!conjunct1!$         & $\displaystyle\frac{\Gamma \vdash A \wedge B}{\Gamma \vdash A}$ &  \\ [2ex]
+  $\verb!conjunct2!$         & $\displaystyle\frac{\Gamma \vdash A \wedge B}{\Gamma \vdash B}$ &  \\ [2ex]
+  $\verb!context_conjI!$     & $\displaystyle\frac{\Gamma \vdash A \quad \Gamma, A \vdash B}{\Gamma \vdash A \wedge B}$ &  \\ [2ex]
+  $\verb!disjI1!$            & $\displaystyle\frac{\Gamma \vdash A}{\Gamma \vdash A \vee B}$ &  \\ [2ex]
+  $\verb!disjI2!$            & $\displaystyle\frac{\Gamma \vdash A}{\Gamma \vdash B \vee A}$ &  \\ [2ex]
+  $\verb!disjCI!$            & $\displaystyle\frac{\Gamma, \neg B \vdash A}{\Gamma \vdash A \vee B}$ &  \\ [2ex]
+  $\verb!disjE!$             & $\frac{\Gamma \vdash A \vee B \quad \Gamma, A \vdash C \quad \Gamma, B \vdash C}{\Gamma \vdash C}$ &  \\ [2ex]
+  $\verb!impI!$              & $\displaystyle\frac{\Gamma, A \vdash B}{\Gamma \vdash A \Rightarrow B}$ &  \\ [2ex]
+  $\verb!impE!$              & $\frac{\Gamma \vdash A \Rightarrow B \quad \Gamma \vdash A \quad \Gamma, B \vdash C}{\Gamma \vdash C}$ &  \\ [2ex]
+  $\verb!impCE!$             & $\displaystyle\frac{\Gamma, A \vdash B \quad \Gamma, \neg A \vdash B}{\Gamma \vdash B}$ &  \\ [2ex]
+  $\verb!mp!$                & $\displaystyle\frac{\Gamma \vdash A \Rightarrow B \quad \Gamma \vdash A}{\Gamma \vdash B}$ & $\Rightarrow$-elim \\ [2ex]
+  $\verb!iffI!$              & $\frac{\Gamma \vdash A \Rightarrow B \quad \Gamma \vdash B \Rightarrow A}{\Gamma \vdash A \Leftrightarrow B}$ &  \\ [2ex]
+  $\verb!iffE!$              & $\frac{\Gamma \vdash A \Leftrightarrow B \quad \Gamma, A \Rightarrow B, B \Rightarrow A \vdash C}{\Gamma \vdash C}$ &  \\ [2ex]
+  $\verb!iffD1!$              & $\displaystyle \frac{\Gamma \vdash A \Leftrightarrow B}{\Gamma \vdash A \Rightarrow B}$ &  \\ [2ex]
+  $\verb!iffD2!$              & $\displaystyle \frac{\Gamma \vdash A \Leftrightarrow B}{\Gamma \vdash B \Rightarrow A}$ & 
+\end{tabular}
+
+\subsubsection{De Morgan Extensions}
+\begin{tabular}{c|c|c}
+  $\verb!notnotD!$           & $\displaystyle\frac{\Gamma, \neg \neg P}{\Gamma \vdash P}$ &  \\ [2ex]
+  $\verb!de_Morgan_disj!$     & $\neg (A \vee B) \Leftrightarrow \neg A \wedge \neg B$ &  \\ [2ex]
+  $\verb!de_Morgan_conj!$     & $\neg (A \wedge B) \Leftrightarrow \neg A \vee \neg B$ &  \\ [2ex]
+  $\verb!disj_not1!$          & $\neg P \vee Q \Leftrightarrow P \Rightarrow Q$ &  \\ [2ex]
+  $\verb!disj_not2!$          & $P \vee \neg Q \Leftrightarrow Q \Rightarrow P$ &  
+\end{tabular}
+
+\subsubsection{Non-Constructive Classical Logic (LK)}
+\begin{tabular}{c|c|c}
+  \textbf{Name}   & \textbf{Rule in sequent style} & \textbf{Desc.} \\ \hline \hline
+  $\verb!True_or_false!$     & $\displaystyle\frac{}{\Gamma \vdash A \Leftrightarrow \top \vee A \Leftrightarrow \bot}$ &  \\ [2ex]
+  $\verb!classical!$         & $\displaystyle\frac{\Gamma, \neg A \vdash A}{\Gamma \vdash A}$ & absurd ? \\ [2ex]
+  $\verb!excluded_middle!$   & $\displaystyle\frac{}{\Gamma \vdash A \vee \neg A}$ &  \\ [2ex]
+  $\verb!ccontr!$            & $\displaystyle\frac{\Gamma, \neg A \vdash \bot}{\Gamma \vdash \bot}$ &  \\ [2ex]
+\end{tabular}
+
+
+\subsubsection{Non-Constructive First Order Logic (FO)}
+\begin{itemize}
+\item $\bigwedge x$ : new parameters introduced
+\item $? x$ : new unknowns introduced
+\end{itemize}
+
+\begin{tabular}{c|c|c}
+  \textbf{Name}   & \textbf{Rule in sequent style} & \textbf{Desc.} \\ \hline \hline
+  $\verb!allI!$   & $\displaystyle\frac{\Gamma \vdash \bigwedge x ~ P (x)}{\Gamma \vdash \forall x~ P(xà}$ & $\forall$-intro \\ [2ex]
+  $\verb!allE!$   & $\displaystyle\frac{\Gamma \vdash \forall x~ P \quad \Gamma, P(? x) \vdash Q}{\Gamma \vdash Q}$ &  \\ [2ex]
+  $\verb!exI!$    & $\displaystyle\frac{\Gamma \vdash P (? x)}{\Gamma \vdash \exists x~ P (x)}$ & $\exists$-intro\\
+  $\verb!exE!$    & $\displaystyle\frac{\Gamma \vdash \exists x ~ P \quad \Gamma, \bigwedge x ~ P(x) \vdash Q}{\Gamma \vdash Q}$ & $\exists$-elim \\ [2ex]
+
+  $\verb!spec!$   & $\displaystyle\frac{\Gamma \vdash \forall x~ P(x)}{\Gamma \vdash P (? x)}$ &  \\ [2ex]
+
+\end{tabular}
+
+\subsubsection{Equational Logic}
+\begin{tabular}{c|c|c}
+  \textbf{Name}   & \textbf{Rule in sequent style} & \textbf{Desc.} \\ \hline \hline
+  $\verb!refl!$    & $\displaystyle\frac{}{x = x}$ & \\ [2ex]
+  $\verb!sym!$    & $\displaystyle\frac{y = x}{x = y}$ & \\ [2ex]
+  $\verb!trans!$  & $\displaystyle\frac{x = y \quad y = z}{x = z}$ & \\ [2ex]
+  $\verb!subst!$  & $\displaystyle\frac{x = y \quad P (x)}{P (y)}$ & \\ [2ex]
+  $\verb!ext!$  & $\displaystyle\frac{\wedge t~ P (t) = Q (t)}{P = Q}$ & \\ [2ex]
+\end{tabular}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\rule{0.3\linewidth}{0.25pt}
+\scriptsize
+
+\LaTeX \ cheat sheet template made by Winston Chang
+
+http://www.stdout.org/$\sim$winston/latex/
+
+
+\end{multicols}
+\end{document}

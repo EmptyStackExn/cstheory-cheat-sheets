@@ -1,0 +1,565 @@
+% Reference Card for GNU Emacs version 23 on Unix systems
+%**start of header
+\newcount\columnsperpage
+
+% This file can be printed with 1, 2, or 3 columns per page (see below).
+% Specify how many you want here.
+
+\columnsperpage=3
+
+% PDF output layout.  0 for A4, 1 for Letter (US), a `l' is added for
+% a landscape layout.
+
+\input pdflayout.sty
+\pdflayout=(0l)
+
+% Nothing else needs to be changed below this line.
+% Copyright (C) 1987, 1993, 1996, 1997, 2001, 2002, 2003, 2004,
+%   2005, 2006, 2007, 2008, 2009  Free Software Foundation, Inc.
+
+% This file is part of GNU Emacs.
+
+% GNU Emacs is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+
+% GNU Emacs is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+
+% You should have received a copy of the GNU General Public License
+% along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.
+
+% This file is intended to be processed by plain TeX (TeX82).
+%
+% The final reference card has six columns, three on each side.
+% This file can be used to produce it in any of three ways:
+% 1 column per page
+%    produces six separate pages, each of which needs to be reduced to 80%.
+%    This gives the best resolution.
+% 2 columns per page
+%    produces three already-reduced pages.
+%    You will still need to cut and paste.
+% 3 columns per page
+%    produces two pages which must be printed sideways to make a
+%    ready-to-use 8.5 x 11 inch reference card.
+%    For this you need a dvi device driver that can print sideways.
+% Which mode to use is controlled by setting \columnsperpage above.
+%
+% To compile and print this document:
+% tex fr-refcard.tex
+% dvips -t landscape fr-refcard.dvi
+%
+
+% Author:
+%  Stephen Gildea
+%  Internet: gildea@stop.mail-abuse.org
+%
+% Thanks to Paul Rubin, Bob Chassell, Len Tower, and Richard Mlynarik
+% for their many good ideas.
+
+% If there were room, it would be nice to see a section on Dired.
+
+\def\versionnumber{0.1}
+\def\versionyear{2011}          % latest update
+\def\year{2010}                 % latest copyright year
+
+\def\shortcopyrightnotice{\vskip 1ex plus 2 fill
+  \centerline{\small \copyright\ \year\ Free Software Foundation, Inc.
+  Permissions au dos.  v\versionnumber}}
+
+\def\copyrightnotice{
+\vskip 1ex plus 2 fill\begingroup\small
+\centerline{Copyright \copyright\ \year\ Free Software Foundation, Inc.}
+%\centerline{v\versionnumber{} pour GNU Emacs version \versionemacs,
+%  \versionyear}
+\centerline{Conception de Stephen Gilda}
+\centerline{Adapt\'e pour la mission spatiale Pratham, IPGP/Universit\'e Paris Diderot}
+
+Vous pouvez faire et distribuer des copies de cette carte, modifi\'ee ou
+non, pourvu que la note de copyright et cette note de permission
+soient conserv\'ees sur toutes les copies.
+
+\endgroup}
+
+% make \bye not \outer so that the \def\bye in the \else clause below
+% can be scanned without complaint.
+\def\bye{\par\vfill\supereject\end}
+
+\newdimen\intercolumnskip       %horizontal space between columns
+\newbox\columna                 %boxes to hold columns already built
+\newbox\columnb
+
+\def\ncolumns{\the\columnsperpage}
+
+\message{[\ncolumns\space
+  column\if 1\ncolumns\else s\fi\space per page]}
+
+\def\scaledmag#1{ scaled \magstep #1}
+
+% This multi-way format was designed by Stephen Gildea October 1986.
+% Note that the 1-column format is fontfamily-independent.
+\if 1\ncolumns                  %one-column format uses normal size
+  \hsize 4in
+  \vsize 10in
+  \voffset -.7in
+  \font\titlefont=\fontname\tenbf \scaledmag3
+  \font\headingfont=\fontname\tenbf \scaledmag2
+  \font\smallfont=\fontname\sevenrm
+  \font\smallsy=\fontname\sevensy
+
+  \footline{\hss\folio}
+  \def\makefootline{\baselineskip10pt\hsize6.5in\line{\the\footline}}
+\else                           %2 or 3 columns uses prereduced size
+  \hsize 3.2in
+  \vsize 7.95in
+%  \hoffset -.75in
+  \hoffset -.49in
+%  \voffset -.745in
+  \voffset -.84in
+  \font\titlefont=cmbx10 \scaledmag2
+  \font\headingfont=cmbx10 \scaledmag1
+  \font\smallfont=cmr6
+  \font\smallsy=cmsy6
+  \font\eightrm=cmr8
+  \font\eightbf=cmbx8
+  \font\eightit=cmti8
+  \font\eighttt=cmtt8
+  \font\eightmi=cmmi8
+  \font\eightsy=cmsy8
+  \textfont0=\eightrm
+  \textfont1=\eightmi
+  \textfont2=\eightsy
+  \def\rm{\eightrm}
+  \def\bf{\eightbf}
+  \def\it{\eightit}
+  \def\tt{\eighttt}
+  \normalbaselineskip=.8\normalbaselineskip
+  \normallineskip=.8\normallineskip
+  \normallineskiplimit=.8\normallineskiplimit
+  \normalbaselines\rm           %make definitions take effect
+
+  \if 2\ncolumns
+    \let\maxcolumn=b
+    \footline{\hss\rm\folio\hss}
+    \def\makefootline{\vskip 2in \hsize=6.86in\line{\the\footline}}
+  \else \if 3\ncolumns
+    \let\maxcolumn=c
+    \nopagenumbers
+  \else
+    \errhelp{You must set \columnsperpage equal to 1, 2, or 3.}
+    \errmessage{Illegal number of columns per page}
+  \fi\fi
+
+  \intercolumnskip=.46in
+  \def\abc{a}
+  \output={%                    %see The TeXbook page 257
+      % This next line is useful when designing the layout.
+      %\immediate\write16{Column \folio\abc\space starts with \firstmark}
+      \if \maxcolumn\abc \multicolumnformat \global\def\abc{a}
+      \else\if a\abc
+        \global\setbox\columna\columnbox \global\def\abc{b}
+        %% in case we never use \columnb (two-column mode)
+        \global\setbox\columnb\hbox to -\intercolumnskip{}
+      \else
+        \global\setbox\columnb\columnbox \global\def\abc{c}\fi\fi}
+  \def\multicolumnformat{\shipout\vbox{\makeheadline
+      \hbox{\box\columna\hskip\intercolumnskip
+        \box\columnb\hskip\intercolumnskip\columnbox}
+      \makefootline}\advancepageno}
+  \def\columnbox{\leftline{\pagebody}}
+
+  \def\bye{\par\vfill\supereject
+    \if a\abc \else\null\vfill\eject\fi
+    \if a\abc \else\null\vfill\eject\fi
+    \end}
+\fi
+
+% we won't be using math mode much, so redefine some of the characters
+% we might want to talk about
+\catcode`\^=12
+\catcode`\_=12
+
+\chardef\\=`\\
+\chardef\{=`\{
+\chardef\}=`\}
+
+\hyphenation{mini-tam-pon}
+
+\parindent 0pt
+\parskip 1ex plus .5ex minus .5ex
+
+\def\small{\smallfont\textfont2=\smallsy\baselineskip=.8\baselineskip}
+
+% newcolumn - force a new column.  Use sparingly, probably only for
+% the first column of a page, which should have a title anyway.
+\outer\def\newcolumn{\vfill\eject}
+
+% title - page title.  Argument is title text.
+\outer\def\title#1{{\titlefont\centerline{#1}}\vskip 1ex plus .5ex}
+
+% section - new major section.  Argument is section name.
+\outer\def\section#1{\par\filbreak
+  \vskip 2ex plus 1.5ex minus 2.5ex {\headingfont #1}\mark{#1}%
+  \vskip 1.5ex plus 1ex minus 1.5ex}
+
+\newdimen\keyindent
+
+% subsection - a sub-section.  Argument is section name.
+\outer\def\subsection#1{\par\filbreak
+  \vskip 2ex plus 1.5ex minus 2.5ex {\headingfont #1}\mark{#1}%
+  \vskip 1.5ex plus 1ex minus 1.5ex}
+
+\newdimen\keyindent
+
+% beginindentedkeys...endindentedkeys - key definitions will be
+% indented, but running text, typically used as headings to group
+% definitions, will not.
+\def\beginindentedkeys{\keyindent=1em}
+\def\endindentedkeys{\keyindent=0em}
+\endindentedkeys
+
+% paralign - begin paragraph containing an alignment.
+% If an \halign is entered while in vertical mode, a parskip is never
+% inserted.  Using \paralign instead of \halign solves this problem.
+\def\paralign{\vskip\parskip\halign}
+
+% \<...> - surrounds a variable name in a code example
+\def\<#1>{{\it #1\/}}
+
+% kbd - argument is characters typed literally.  Like the Texinfo command.
+\def\kbd#1{{\tt#1}\null}        %\null so not an abbrev even if period follows
+
+% beginexample...endexample - surrounds literal text, such a code example.
+% typeset in a typewriter font with line breaks preserved
+\def\beginexample{\par\leavevmode\begingroup
+  \obeylines\obeyspaces\parskip0pt\tt\tolerance=10000}
+{\obeyspaces\global\let =\ }
+\def\endexample{\endgroup}
+
+% key - definition of a key.
+% \key{description of key}{key-name}
+% prints the description left-justified, and the key-name in a \kbd
+% form near the right margin.
+\def\key#1#2{\leavevmode\hbox to \hsize{\vtop
+  {\hsize=.75\hsize\rightskip=1em
+  \hskip\keyindent\relax#1}\kbd{#2}\hfil}}
+
+\newbox\metaxbox
+\setbox\metaxbox\hbox{\kbd{M-x }}
+\newdimen\metaxwidth
+\metaxwidth=\wd\metaxbox
+
+% metax - definition of a M-x command.
+% \metax{description of command}{M-x command-name}
+% Tries to justify the beginning of the command name at the same place
+% as \key starts the key name.  (The "M-x " sticks out to the left.)
+% Note: was \hsize=.74, but changed to avoid overflow in some places.
+\def\metax#1#2{\leavevmode\hbox to \hsize{\hbox to .75\hsize
+  {\hskip\keyindent\relax#1\hfil}%
+  \hskip -\metaxwidth minus 1fil
+  \kbd{#2}\hfil}}
+
+% threecol - like "key" but with two key names.
+% for example, one for doing the action backward, and one for forward.
+\def\threecol#1#2#3{\hskip\keyindent\relax#1\hfil&\kbd{#2}\hfil\quad
+  &\kbd{#3}\hfil\quad\cr}
+
+% theoreme
+\def\thm{{\bf Th\'eor\`eme. }}
+
+% definition
+\def\defn{{\bf D\'efinition. }}
+
+% definition
+\def\rmq{{\bf Remarque. }}
+
+% astuce
+\def\ast{{\bf Astuce. }}
+
+% limite
+\def\lim{\mathop{\rm lim}}
+
+% Block diagram
+\def\bd{{\it Block Diagram }}
+
+% Front Panel
+\def\fp{{\it Front Panel }}
+
+%**end of header
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title{Carte de r\'ef\'erence pour LabVIEW 8.5}
+
+\centerline{(ou le {\it langage G} pour les nuls)}
+
+\centerline{\'Equipe Pratham}
+\centerline{Institut de Physique du Globe de Paris $-$ Universit\'e Paris Diderot}
+%\centerline{(pour la version \versionemacs)}
+
+\section {Br\`eve approche}
+(1) Mettre en service la machine et le bo\^itier d'acquisition.
+
+(2) Sur le {\it Bureau}, ex\'ecuter le logiciel :
+\vbox{
+\hrule
+\hbox{\strut \vrule{} NI LabVIEW 8.5 \vrule}
+\hrule
+}
+
+(3) Dans la fen\^etre {\it Getting Started}, choisir :
+
+\centerline{
+\vbox{
+\hrule
+\hbox{\strut \vrule{} Files \vrule}
+\hrule
+}
+\vbox{
+\hbox{\strut $\rightarrow$}
+}
+\vbox{
+\hrule
+\hbox{\strut \vrule{} New \vrule}
+\hrule
+}
+\vbox{
+\hbox{\strut $\rightarrow$}
+}
+\vbox{
+\hrule
+\hbox{\strut \vrule{} Blank VI \vrule}
+\hrule
+}
+}
+
+\defn Un {\bf VI} ou {\it Virtual Instrument} est un programme.
+
+\rmq L'environnement de LabVIEW se d\'ecompose en deux fen\^etres qui concernent :
+
+$-$ {\bf Block Diagram} (fond blanc) : le fonctionnement interne du programme compos\'e de {\bf Functions}
+
+$-$ {\bf Front Panel} (fond gris \`a carreaux) : l'affichage externe du programme compos\'e de {\bf Controls}
+
+\ast Raccourcis clavier indispensables :
+
+$-$ passer d'une fen\^etre \`a l'autre :
+\vbox{
+\hrule
+\hbox{\strut \vrule{} Ctrl \vrule}
+\hrule
+}
+ $+$ 
+\vbox{
+\hrule
+\hbox{\strut \vrule{} E \vrule}
+\hrule
+}
+
+$-$ ex\'ecuter le VI :
+\vbox{
+\hrule
+\hbox{\strut \vrule{} Ctrl \vrule}
+\hrule
+}
+ $+$ 
+\vbox{
+\hrule
+\hbox{\strut \vrule{} R \vrule}
+\hrule
+}
+
+$-$ arr\^eter le VI :
+\vbox{
+\hrule
+\hbox{\strut \vrule{} Ctrl \vrule}
+\hrule
+}
+ $+$ 
+\vbox{
+\hrule
+\hbox{\strut \vrule{} $.$ \vrule}
+\hrule
+}
+
+\rmq Pour ajouter des {\it Functions} dans {\it Block Diagram} ou des {\it Controls} dans {\it Front Panel}, il suffit d'effectuer un clic-droit dans la fen\^etre concern\'ee et de choisir dans le menu d\'eroulant.
+
+\section{Premiers pas en acquisition}
+
+(1) Ins\'erer la fonction ``{\bf DAQ Assistant}'' dans \bd avec un clic-droit (une autre fen\^etre va s'ouvrir : cf. {\bf Appendix ``Configuration de DAQ Assistant''}) :
+
+\centerline{
+        \vbox{
+        \hrule
+        \hbox{\strut \vrule{} Functions \vrule}
+        \hrule
+        }
+        \vbox{
+        \hbox{\strut $\rightarrow$}
+        }
+        \vbox{
+        \hrule
+        \hbox{\strut \vrule{} $\vee$ \vrule}
+        \hrule
+        }
+        \vbox{
+        \hbox{\strut $\rightarrow$}
+        }
+        \vbox{
+        \hrule
+        \hbox{\strut \vrule{} Intrument I/O \vrule}
+        \hrule
+        }
+        \vbox{
+        \hbox{\strut $\rightarrow$}
+        }
+        \vbox{
+        \hrule
+        \hbox{\strut \vrule{} DAQ Assistant \vrule}
+        \hrule
+        }
+}
+
+(2) Ins\'erer le controle ``{\bf Waveform Graph}'' dans \fp avec un clic-droit :
+
+\centerline{
+        \vbox{
+        \hrule
+        \hbox{\strut \vrule{} Controls \vrule}
+        \hrule
+        }
+        \vbox{
+        \hbox{\strut $\rightarrow$}
+        }
+        \vbox{
+        \hrule
+        \hbox{\strut \vrule{} Graph Indicators \vrule}
+        \hrule
+        }
+        \vbox{
+        \hbox{\strut $\rightarrow$}
+        }
+        \vbox{
+        \hrule
+        \hbox{\strut \vrule{} Graph \vrule}
+        \hrule
+        }
+}
+
+(3) Revenir dans la fen\^etre \bd. Localiser les deux ic\^ones ``{\it DAQ Assistant}'' et ``{\it Waveform Chart}''. Relier le chevron ($\triangleright$) droit ``{\tt data}'' de ``{\it DAQ Assistant}'' au chevron ($\triangleright$) gauche de ``{\it Waveform Graph}''.
+
+{\bf Notation.} On note les {\bf chevrons} ($\triangleright$), se situant \`a gauche (resp. \`a droite) des ic\^ones ou VI, les donn\'ees pass\'ees \`a l'int\'erieur de celles-ci (resp. les donn\'ees retourn\'ees par celles-ci).
+
+\rmq On note que l'ic\^one ``{\it DAQ Assistant}'' a un chevron \`a droite et ``{\it Waveform Chart}'' un chevron \`a gauche. En effet, on passe les {\it valeurs} renvoy\'ees par le VI {\it DAQ Assistant} au VI {\it Waveform Chart} afin que ce dernier les affiche \`a l'\'ecran.
+
+(4) Ex\'ecuter le programme : ic\^one \vbox{ \hrule \hbox{\strut \vrule{} $\Rightarrow$ \vrule} \hrule } en haut \`a gauche de la fen\^etre ou  \vbox{ \hrule \hbox{\strut \vrule{} Ctrl \vrule} \hrule } + \vbox{ \hrule \hbox{\strut \vrule{} R \vrule} \hrule }
+
+\section {\'El\'ements de programmation en G}
+{\bf Boucles {\tt while()}.} Une boucle permet d'effectuer une s\'equence de plusieurs acquisitions. Ins\'erer par clic-droit la fonction ``{\it While Loop}'' dans \bd en encadrant toutes les ic\^ones sur lesquelles boucler :
+
+\centerline{
+\vbox{ \hrule \hbox{\strut \vrule{} Functions \vrule} \hrule } $\rightarrow$ \vbox{ \hrule \hbox{\strut \vrule{} Exec Control \vrule} \hrule } $\rightarrow$ \vbox{ \hrule \hbox{\strut \vrule{} While Loop \vrule} \hrule }
+}
+
+{\bf Enregistrement sur fichier type {\tt lvm}.} La solution {\it temporaire} d'enregistrement des fichiers est celui-ci du type {\tt lvm} de LabVIEW, qui enregistre les valeurs dans un fichier texte pouvant \^etre r\'eouvert dans un bloc-notes.
+
+(1) Ins\'erer la fonction ``{\it Write To Measurement File}'' dans \bd par clic-droit:
+
+\centerline{
+\vbox{ \hrule \hbox{\strut \vrule{} Functions \vrule} \hrule } $\rightarrow$ \vbox{ \hrule \hbox{\strut \vrule{} $\vee$ \vrule} \hrule } $\rightarrow$ \vbox{ \hrule \hbox{\strut \vrule{} Programming \vrule} \hrule }
+}
+\centerline{
+$\rightarrow$ \vbox{ \hrule \hbox{\strut \vrule{} File I/O \vrule} \hrule } $\rightarrow$ \vbox{ \hrule \hbox{\strut \vrule{} Write To Measurement File \vrule} \hrule }
+}
+
+(2) Relier le chevron ($\triangleright$) droit de ``{\it DAQ Assistant}'' au chevron gauche de ``{\it Waveform Chart}''.
+
+{\bf Configuration du graphe (\'echelle, couleurs, $\dots$).} Faire un clic-droit directement sur le graphe ou sur ``{\it Waveform Chart}'' puis choisir \vbox{ \hrule \hbox{\strut \vrule{} Properties \vrule} \hrule }.
+
+\ast L'onglet \vbox{ \hrule \hbox{\strut \vrule{} Scales \vrule} \hrule } permet de modifier l'\'echelle :
+
+(a) Choisir l'axe ``{\it Time (X-Axis)}'' ou ``{\it Amplitude (Y-Axis)}''
+
+(b) Pour sp\'ecifier une \'echelle fixe, d\'ecocher la case ``{\it Autoscale}'' puis remplir les champs avec les extrema voulus.
+
+\ast Si le graphe est suppos\'e afficher plusieurs canaux diff\'erents. Retourner dans \fp et \'elargir la barre horizontale \vbox{ \hrule \hbox{\strut \vrule{} {\tt Untitled 1} \vbox {\hrule \hbox {$\sim$} \hrule} \vrule} \hrule } vers la gauche afin de mettre en \'evidence la l\'egende des couleurs pour les canaux des graphes.
+
+{\bf Configuration de l'acquisition (fr\'equence, canaux, $\dots$).} Retourner dans la fen\^etre \bd et double-cliquer sur l'ic\^one ``{\it DAQ Assistant}''. Suivre l'{\bf Appendix ``Configuration de DAQ Assistant''}.
+
+\section {Appendix : Utilisation du VI \`a acquisition automatis\'e par plannification}
+
+\centerline{
+        {\bf (pas v\'erifi\'e)}
+}
+
+(a) Ouvrir le fichier {\tt Main.vi};
+
+(b) Ex\'ecuter le VI;
+
+(c) Indiquer le champ ``Nova eclipse'' avec le fichier {\it Nova} des \'eclipses du satellite au-dessus de Paris;
+
+(d) Cliquer sur \vbox{ \hrule \hbox{\strut \vrule{} START \vrule} \hrule }
+
+\section {Appendix : Configuration de DAQ Assistant}
+
+{\bf Ajouter des canaux d'acquisition.}
+
+Cliquer sur \vbox{ \hrule \hbox{\strut \vrule{} Add Channels \vrule} \hrule } ou sur \vbox{ \hrule \hbox{\strut \vrule{} {\bf +} \vrule} \hrule } :
+
+$-$ Choisir {\tt Voltage};
+
+$-$ S\'el\'ectionner le(s) canaux {\tt ai}_k (avec \vbox{ \hrule \hbox{\strut \vrule{} {\bf $\Uparrow$ MAJ} \vrule} \hrule } si plusieurs).
+
+{\bf Supprimer des canaux d'acquisition.}
+
+Dans \vbox{ \hrule \hbox{\strut \vrule{} Express Task \vrule} \hrule } $\rightarrow$ \vbox{ \hrule \hbox{\strut \vrule{} Configuration \vrule} \hrule } $\rightarrow$ \vbox{ \hrule \hbox{\strut \vrule{} Channel Settings \vrule} \hrule } :
+
+(a) S\'electionner le(s) canaux \`a supprimer (avec \vbox{ \hrule \hbox{\strut \vrule{} {\bf $\Uparrow$ MAJ} \vrule} \hrule } si plusieurs);
+
+(b) Cliquer sur \vbox{ \hrule \hbox{\strut \vrule{} {\bf $\times$} \vrule} \hrule }.
+
+\rmq Un {\bf canal} (ou {\it channel}) est compos\'e de trois branchements sur le bo\^itier : la {\bf phase} (p\^ole positif), le {\bf neutre} (p\^ole n\'egatif) et la {\bf terre}. Il faut penser \`a relier le p\^ole n\'egatif \`a la terre!
+
+{\bf Branchements des canaux sur le bo\^itier.}
+
+Les branchements \`a effectuer sur le bo\^itier sont susceptibles de changer suivant l'attribution automatique des voies par LabVIEW. V\'erifier les branchements corrects en utilisant, en haut \`a gauche, l'onglet \vbox{ \hrule \hbox{\strut \vrule{} Connection Diagram \vrule} \hrule }.
+
+{\bf R\'eglage du calibre d'amplitude.} Remplir les champs :
+\vbox{ \hrule \hbox{\strut \vrule{} Strain Setup \vrule} \hrule } $\rightarrow$ \vbox{ \hrule \hbox{\strut \vrule{} Settings \vrule} \hrule } $\rightarrow$ \vbox{ \hrule \hbox{\strut \vrule{} Signal Input Range \vrule} \hrule } $\rightarrow$ \vbox{ \hrule \hbox{\strut \vrule{} Max/Min \vrule} \hrule } avec les {\it extrema} des tensions. Un calibre optimal  permet d'obtenir plus de pr\'ecision mais ne doit pas \^etre trop r\'eduit au risque de mettre en p\'eril le bo\^itier d'acquisition.
+
+{\bf R\'eglage de la fr\'equence d'\'echantillonage.}
+
+$-$ Choisir le mode d'acquisition suivant :
+\vbox{ \hrule \hbox{\strut \vrule{} Express Task \vrule} \hrule } $\rightarrow$ $\dots$
+
+$\rightarrow$ \vbox{ \hrule \hbox{\strut \vrule{} Timing Settings \vrule} \hrule } $\rightarrow$ \vbox{ \hrule \hbox{\strut \vrule{} Acquisition Mode \vrule} \hrule } $\rightarrow$ \vbox{ \hrule \hbox{\strut \vrule{} N Samples \vrule} \hrule }
+
+$-$ Remplir les deux champs suivant l'exp\'erience :
+
+Nombre d'\'echantillons \`a acqu\'erir : \vbox{ \hrule \hbox{\strut \vrule{} Samples to Read \vrule} \hrule }
+
+Fr\'equence d'acquisition : \vbox{ \hrule \hbox{\strut \vrule{} Rate (Hz) \vrule} \hrule}
+
+\rmq Lors de l'appel de la fonction ``DAQ Assistant'' au moment de l'acquisition, le bo\^itier prendra un temps $\Delta t$ n\'ecessaire avant l'envoi des donn\'ees en machine. On a :
+
+$ $
+
+\centerline{
+        $\Delta t = {Samples \ to \ Read \ [1] \over Rate \ [Hz]}$
+}
+
+{\bf Finalisation.} Cliquer sur \vbox{ \hrule \hbox{\strut \vrule{} OK \vrule} \hrule }.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\copyrightnotice
+
+\bye
+
+% Local variables:
+% compile-command: "pdftex fr-refcard"
+% End:
+
+% arch-tag: 39d6dc6e-1a4a-4071-84db-4719d4e9e40d
