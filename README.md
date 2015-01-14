@@ -3,6 +3,13 @@ CS Theory Cheat Sheets
 
 > A set of homemade cheat sheets for [theoretical computer science](http://www.euclideanspace.com/software/computation/theory/index.htm)
 
+Contents
+-------------------
+
+* Abstract Interpretation
+* Category Theory
+* Isabelle/HOL Proof Assistant
+
 Make Your Own
 -------------------
 
