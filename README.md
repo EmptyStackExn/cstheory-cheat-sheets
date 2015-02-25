@@ -3,12 +3,16 @@ CS Theory Cheat Sheets
 
 > A set of homemade cheat sheets for [theoretical computer science](http://www.euclideanspace.com/software/computation/theory/index.htm)
 
+![Barendregt Cube](img/barendregt.jpg "Barendregt Cube")
+
 Contents
 -------------------
 
-* Abstract Interpretation
-* Category Theory
-* Isabelle/HOL Proof Assistant
+* [Abstract Interpretation](abstract_interpretation_refcard.pdf)
+* [Category Theory](category_theory_refcard.pdf)
+* [Isabelle/HOL Proof Assistant](isabelle_hol_refcard.pdf)
+* [Semantics of Programming Languages I (λ-calculus)]()
+* [Semantics of Programming Languages II (confluence, termination)]()
 
 Make Your Own
 -------------------
