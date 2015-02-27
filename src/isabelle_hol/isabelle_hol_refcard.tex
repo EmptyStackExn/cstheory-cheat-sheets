@@ -137,10 +137,16 @@ Use of Natural Deduction (ND) instead of Gentzen sequent calculus (LJ/LK). Thus,
 \begin{itemize}
 \item datatype definitions:
 \begin{eqnarray*}
-  \verb!datatype ('a1, ..., 'an) = ! \langle c \rangle\verb! :: "! \langle \tau \rangle \verb!"! | \dots | \langle c \rangle\verb! :: "! \langle \tau \rangle \verb!"! 
+  \verb!datatype ('a1, ..., 'an) !\kappa = \langle c \rangle\verb! :: "! \langle \tau \rangle \verb!"! | \dots | \langle c \rangle\verb! :: "! \langle \tau \rangle \verb!"! 
 \end{eqnarray*}
 
-\item recursive function definitions : \verb!typedef ('a1, ..., 'an) !$\kappa$\verb! = "!$\langle\textsf{set-expr}\rangle$\verb!" !$\langle\textsf{proof}\rangle$
+\item quotient type definitions:
+\begin{eqnarray*}
+  \verb!quotient_type ('a1, ..., 'an) !\kappa = \langle \textsf{type} \rangle \verb! / ! \langle \textsf{equiv rel} \rangle 
+\end{eqnarray*}
+
+\item recursive function definitions : \verb!fun f :: "!$\langle\tau\rangle$\verb!"!
+  \verb!where !\textsf{name}\verb! : "f x1 ... xn = !$\langle\tau\rangle$\verb!"! $\langle\textsf{proof}\rangle$
 
   \textbf{Example.} \verb!typedef even  = "{ x :: int. x mod 2 = 0 }"!
 
@@ -168,6 +174,14 @@ record <c> = [<record> +]
 \end{alltt}
 
 \end{itemize}
+
+\section{Useful operators in HOL}
+
+\begin{alltt}
+- quotient set lifting
+( // ) : "'a set ==> ('a × 'a) set ==> 'a set set"
+\end{alltt}
+
 
 \section{Apply rules and theorems}
 

@@ -1,9 +1,5 @@
 all:
-	cd src/abstract_interpretation && make && mv *.pdf ../..
-	cd src/category_theory && make && mv *.pdf ../..
-	cd src/isabelle_hol && make && mv *.pdf ../..
+	cd src/abstract_interpretation && make && mv *.pdf ../../output/
+	cd src/category_theory && make && mv *.pdf ../../output/
+	cd src/isabelle_hol && make && mv *.pdf ../../output/
 
-clean:
-	rm -fR abstract_interpretation_refcard.pdf
-	rm -fR category_theory_refcard.pdf
-	rm -fR isabelle_hol_refcard.pdf
