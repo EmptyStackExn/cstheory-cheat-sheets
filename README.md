@@ -3,7 +3,7 @@ CS Theory Cheat Sheets
 
 > A set of homemade cheat sheets on various [theoretical computer science](http://www.euclideanspace.com/software/computation/theory/index.htm) topics.
 
-![Barendregt Cube](img/barendregt.jpg "Barendregt Cube")
+!["Extracted from Instagram @consequently](img/11143026_1418693258448378_497785201_n.jpg "Extracted from Instagram @consequently")
 
 Contents
 -------------------
